@@ -1,0 +1,129 @@
+\documentclass[a4paper, 12pt]{report}
+\usepackage[utf8]{inputenc}
+\renewcommand*\familydefault{\sfdefault} %% Only if the base font of the document is to be sans serif´
+\usepackage{comfortaa}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\usepackage[top=4cm,left=2.8cm,right=2.8cm,bottom=2.8cm]{geometry}
+\usepackage{listings}		% Ajout de code
+\usepackage{supertabular}
+\usepackage{graphicx} % for pictures
+\usepackage{amsmath}
+\usepackage[tight]{shorttoc} % for summary
+\usepackage{subcaption} % for many pictures in a figure 
+\setlength{\parindent}{0pt} %Remove space in the beginning of each paragraph
+%\usepackage{parskip}  %for more  option concerning paragraph
+
+% Modification du comportement de \chapter
+\addto\captionsfrench{\renewcommand{\chaptername}{Partie}}
+
+% Modification du style des lstlistings
+\newcommand\keywordstyle[1]{{\sc\bfseries\underbar{#1}}}%
+
+\lstset{
+	literate=
+		{á}{{\'a}}1
+		{é}{{\'e}}1
+  		{Á}{{\'A}}1
+  		{É}{{\'E}}1
+		{à}{{\`a}}1
+		{è}{{\`e}}1
+		{ù}{{\`u}}1
+		{À}{{\`A}}1
+		{È}{{\'E}}1
+		{Ù}{{\`U}}1
+		{ä}{{\"a}}1
+		{ë}{{\"e}}1
+		{ï}{{\"i}}1
+		{ö}{{\"o}}1
+		{ü}{{\"u}}1
+		{Ä}{{\"A}}1
+		{Ë}{{\"E}}1
+		{Ï}{{\"I}}1
+		{Ö}{{\"O}}1
+		{Ü}{{\"U}}1
+		{â}{{\^a}}1
+		{ê}{{\^e}}1
+		{î}{{\^i}}1
+		{ô}{{\^o}}1
+		{û}{{\^u}}1
+		{Â}{{\^A}}1
+		{Ê}{{\^E}}1
+		{Î}{{\^I}}1
+		{Ô}{{\^O}}1
+		{Û}{{\^U}}1
+		{œ}{{\oe}}1
+		{Œ}{{\OE}}1
+		{æ}{{\ae}}1
+		{Æ}{{\AE}}1
+		{ß}{{\ss}}1
+		{ç}{{\c c}}1
+		{Ç}{{\c C}}1
+		{ø}{{\o}}1
+		{«}{{\guillemotleft}}1
+		{»}{{\guillemotright}}1
+		{≠}{{$\neq$}}1
+		{≤}{{$\leq$}}1
+		{≥}{{$\geq$}}1
+		{<}{{$<$}}1
+		{>}{{$>$}}1
+		{←}{{$\leftarrow$}}1
+		{à2}{{\keywordstyle{\`a}}}2
+		{et2}{{\keywordstyle{et}}}2
+		{de2}{{\keywordstyle{de}}}3
+		{...}{{\ldots}}3
+		{×}{{$\times$}}1
+		{D2}{{\keywordstyle{D}}}2
+		{D/R}{{\keywordstyle{D/R}}}3
+		{R2}{{\keywordstyle{R}}}2
+		{L2}{{\keywordstyle{L}}}2
+		{Libère}{{\keywordstyle{Lib\`ere}}}6
+		{partir2}{{\keywordstyle{partir}}}6
+		{en2}{{\keywordstyle{en}}}2
+		{mode2}{{\keywordstyle{mode}}}4
+		{lecture2}{{\keywordstyle{lecture}}}7
+		{cases2}{{\keywordstyle{cases}}}5
+		{mémoires2}{{\keywordstyle{m\`emoires}}}8
+		{la2}{{\keywordstyle{la}}}2
+		{taille2}{{\keywordstyle{taille}}}6
+		{d'un2}{{\keywordstyle{d'un}}}5
+		{entier2}{{\keywordstyle{entier}}}6
+		{pointeur2}{{\keywordstyle{pointeur}}}8
+		{vers2}{{\keywordstyle{vers}}}4
+		{un2}{{\keywordstyle{un}}}2
+		{réel2}{{\keywordstyle{r\`eel}}}4
+		{Reallouer2}{{\keywordstyle{R\'eallouer}}}9
+}
+
+\lstdefinelanguage{pseudo} {
+	morekeywords=[1]{Action, Fonction, Pour, allant, Faire, Fait, Si, Alors, Sinon, FSi, Tant que, FAction, FFonction, type, structure, fin, Allouer, Lire, Afficher, Ouvrir, Fermer},
+	morekeywords=[2]{Vrai, Faux},
+	keywordstyle=[1]{\sc\bfseries\underbar},
+	keywordstyle=[2]{\sc},
+	morecomment=[s]{\{}{\}},
+	texcl=true,
+	breaklines=true,
+	numbers=left,
+	tabsize=2,
+	frame=shadowbox,
+	emptylines=1
+}
+
+\renewcommand{\lstlistingname}{Algorithme}
+
+\begin{document}
+
+	\begin{comfortaa}
+	\input{Chapter/TitlePage}
+	\shorttoc{\comfortaa Summary}{2}
+	\end{comfortaa}
+
+
+\input{Chapter/Introduction}
+\input{Chapter/Part1}
+\input{Chapter/Part2}
+\input{Chapter/Part3}
+\input{Chapter/Part4}
+\input{Chapter/Conclusion}
+
+\end{document}

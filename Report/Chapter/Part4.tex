@@ -1,0 +1,7 @@
+\chapter{Possible improvements}
+
+The program we've developed provides an acceptable solution to the problem of deliveries constrained by loading capacity. It does not always give the optimal solution. In fact, no guarantee is given on the quality of the solution obtained, as we don't know the approximation factor of the method used. Experience has shown that for a small number of customers, the deviation from the optimal solution is minimal. To give the optimal solution for any situation, we would have to run the algorithm starting the giant tour with each customer, and compare the costs obtained. This means running the algorithm $n$ times, where $n$ represents the number of customers, at the expense of complexity.
+
+Moreover, our program uses a cutting procedure designed for a single truck capacity $Q$. However, a delivery company often has vehicles of different types (semi-trailer, van, bicycle) with different capacities. Furthermore, logistics companies often talk about the "last mile" issue, and are experimenting with a number of innovative means of transport, such as drone delivery.
+
+Finally, there are other costs to be taken into account when planning deliveries, such as driver working time. It could also be interesting to introduce a time constraint for deliveries. This is known as {\it Vehicle Routing Problem with Time Windows} (VRPTW).

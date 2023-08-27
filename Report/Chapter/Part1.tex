@@ -1,0 +1,414 @@
+\chapter{Analysis and design}
+
+\section{Specification details}
+
+The project therefore addresses the problem of cost in carrier deliveries. Here, we only consider the costs associated with the distance covered, and not the drivers' salaries or those associated with vehicle maintenance.
+
+We assume that trucks have identical storage capacity, and that they all depart from the same depot to make their deliveries, then return there at the end of their rounds. Similarly, we assume that carriers cannot pass a customer without delivering, and that a customer cannot be partially delivered by a truck.
+
+Our program should therefore return the minimum cost of a delivery, as well as the order of customers for each delivery round. The resulting solution is not necessarily optimal. In fact, the proposed method is based on heuristic methods. 
+
+Finally, the input files have a specific format, where the first line corresponds to the number of customers to be delivered, the second to the maximum capacity in units of the vehicles, the third to the delivery requests in units of each customer which must be less than the maximum capacity of the vehicles, and the last lines correspond to the various distances. Here's an example of a source file :
+
+\begin{figure}
+\centering
+\caption{Example of a source file}
+\begin{tabular}{|c c c c c c|}
+\hline
+5	& 		 & 		& 		& 		& \\
+10	& 		 & 		& 		& 		& \\
+5	& 4 	 & 4 	& 2 	& 7 	& \\
+0	& 20	 & 25 	& 30 	& 40 	& 35 \\
+20	& 0 	 & 10 	& 15 	& 40 	& 50 \\
+25	& 10	 & 0 	& 30 	& 40 	& 35 \\
+30	& 15	 & 30 	& 0 	& 25 	& 30 \\
+40	& 40	 & 40 	& 25 	& 0 	& 15 \\
+35	& 50	 & 35	& 30 	& 15 	& 0 \\
+\hline
+\end{tabular}
+\end{figure}
+
+In this example, the number of customers is 5. The trucks have a capacity of 10 units. Customer $C_3$ requires 4 units. Between the depot and customer $C_5$, the distance is 35, while between customer $C_3$ and $C_4$, the distance is 25. We'll continue our analysis using this example source file.
+
+\section{Choice of graph modeling}
+
+Given the specifications imposed on us, we decide to model this problem using a graph, in which the vertices represent the customers and the depot, while the edges represent the routes between the different customers, as well as between the customers and the depot, weighted by the distance of the route. The quantities requested by each customer are indicated in superscript on each vertex. Customers are denoted by $C_1$, $C_2$, \ldots, $C_n$ and the depot corresponds to vertex $D$.
+
+\section{Algorithm sequence}
+
+\subsection{Giant tour}
+
+The Giant Tour algorithm is designed to create a tour that passes through all the customers and covers them only once. We don't consider the depot, just the customers and the distances between them. The giant tour program starts with the first customer given as a parameter and then searches for the second closest customer. For each iteration, the next customer to be traversed is the one closest to the current customer and not already taking part in the giant tour.
+
+\subsubsection{Data structure}
+
+The algorithm needs the distances separating customers from each other to be able to search for the closest customer to the current one that is not already marked. These distances are read through a text file in the form of a matrix A where the distances separating the customers (or with the depot) $i$ and $j$ are noted as $A_{ij}$ and $A_{ji}$. To minimize the memory space allocated to this redundant data, we wanted to replace the matrix with a table of successors. However, we quickly realized that traversing this table to determine the minimum distance among the remaining customers would have been too complicated. So, in the example below, between customer $C_4$ and the depot ($j=0$), the distance is $40$.
+
+\begin{displaymath}
+\begin{bmatrix}
+0.0	& 20.0	 & 25.0 	& 30.0 	& 40.0 	& 35.0 \\
+20.0	& 0.0 	 & 10.0 	& 15.0 	& 40.0 	& 50.0 \\
+25.0	& 10.0	 & 0.0 	& 30.0 	& 40.0 	& 35.0 \\
+30.0	& 15.0	 & 30.0 	& 0.0 	& 25.0 	& 30.0 \\
+40.0	& 40.0	 & 40.0 	& 25.0 	& 0.0 	& 15.0 \\
+35.0	& 50.0	 & 35.0	& 30.0 	& 15.0 	& 0.0
+\end{bmatrix}
+\end{displaymath}
+
+\vspace*{5cm}
+Next, for the sequence of customers to be visited on the giant tour, we decided to use a vector $T$ of size $n$, where $n$ corresponds to the number of customers. This data structure enables translation between the numerical order of customers and the order of the giant tour. For example, here, the first customer on the giant tour ($T_0$) is customer $C_3$.
+
+\begin{displaymath}
+T = \begin{bmatrix}
+3 & 1 & 2 & 5 & 4
+\end{bmatrix}
+\end{displaymath}
+
+\subsubsection{Pseudo-code}
+
+\begin{lstlisting}[language=pseudo, caption={Tour géant}, label=tour_geant]
+Fonction tour_geant(debut, n, M) : Vecteur d'Entiers de taille n
+	D2 :
+		debut	:	Entier {Premier client du tour géant}
+		n		:	Entier
+		M		:	Matrice de Réels de taille n×n
+
+	L2 :
+		i		:	Entier
+		j		:	Entier
+		ind_min	:	Entier {Indice du plus proche voisin}
+		min		:	Réel {Distance du plus proche voisin}
+		courant	:	Entier {Client courant}
+		mark	:	Vecteur d'Entiers de taille n {Tableau des sommets déjà visités}
+		T		:	Vecteur d'Entiers de taille n
+
+	{Initialisation}
+	Pour i allant de2 1 à2 n Faire
+		mark[i] ← Faux
+	Fait
+
+	courant ← debut
+
+	{Parcours de tous les clients}
+	Pour i allant de2 1 à2 n Faire
+		{On ajoute le client courant dans le tableau T et on le marque}
+		T[i] ← courant
+		mark[courant] ← Vrai
+
+		{On initialise les variables pour la recherche du plus proche voisin}
+		j ← 1;
+		Tantque (mark[j] = Vrai ou M[courant][j] = 0) et2 (j ≤ n) Faire
+			j ← j + 1
+		Fait
+
+		ind_min ← j
+		min ← M[courant][ind_min]
+
+		{On parcourt une colonne à la recherche du plus proche voisin non marqué}
+		Pour j allant de2 2 à2 n+1 Faire
+			Si (mark[j] = Faux) et2 M[courant][j] ≠ 0 Alors
+				Si M[courant][j] < min Alors
+					min ← M[courant][j]
+					ind_min ← j
+				FSi
+			FSi
+		Fait
+
+		{On change de client}
+		courant ← ind_min
+	Fait
+
+	R2 :
+		T
+FFonction
+\end{lstlisting}
+
+\subsection{Cutting procedure}
+
+The Split algorithm is used to determine an auxiliary graph, in which edges represent elementary cycles (tours) and vertices represent transitions between two tours. Edges are weighted by their cost.
+
+\subsubsection{Data structure}
+
+There are several ways of representing graphs : matrix and tabular. The graph produced by the slicing procedure is then used by Bellman's successor algorithm to calculate the shortest path. A tabular representation, with a table of successors, seemed more logical to us. We therefore defined the following data structure :
+
+\begin{lstlisting}[language=pseudo, caption={Définition de la structure graphe}, label=struct_graphe]
+type graphe structure
+	n	:	Entier {Nombre de sommets}
+	m	:	Entier {Nombre d'arêtes}
+	head	:	Vecteur d'Entiers de taille n
+	succ	:	Vecteur d'Entiers de taille m
+	cost	:	Vecteur de Réels de taille m {Pondérations des arêtes}
+fin
+\end{lstlisting}
+
+The list of successors to a given vertex is stored contiguously in a dynamic vector of size $m$. The \textit{head} vector contains the indices for finding a vertex's successors. The \textit{cost} vector works in the same way as the \textit{succ} vector, but stores the weights. The integer $n$ can be predefined at the start of the algorithm, as can the size of \textit{head}, which is $n-1$. As for $m$, it will be modified with each iteration, as will the dynamic size of the vectors \textit{succ} and \textit{cost}. Adding an arc will therefore require memory reallocations.
+
+\begin{displaymath}
+head = \begin{bmatrix}
+0 & 2 & 4 & 5 & 7
+\end{bmatrix}
+\end{displaymath}
+
+\begin{displaymath}
+succ = \begin{bmatrix}
+1 & 2 & 2 & 3 & 3 & 4 & 5 & 5
+\end{bmatrix}
+\end{displaymath}
+
+\begin{displaymath}
+cost = \begin{bmatrix}
+60.0 & 65.0 & 40.0 & 55.0 & 50.0 & 70.0 & 90.0 & 80.0
+\end{bmatrix}
+\end{displaymath}
+
+In the example above, the $H_1$ vertex has the $\{2, 3 \}$ set as its successors.
+
+\subsubsection{Pseudo-code}
+
+\begin{lstlisting}[language=pseudo, caption={Ajout d'un arc}, label=ajouter_arc]
+Action ajouter_arc(G, predecesseur, successeur, cout)
+    D2 :
+        G   :   Graphe
+        predecesseur    :   Entier
+        successeur  :   Entier
+        cout    :   Réel
+    
+    Si G.m = 0 Alors
+		G.head[0] ← G.m
+		G.succ[G.m] ← successeur
+		G.cost[G.m] ← cout
+		G.m ← G.m + 1
+    Sinon
+		{Tableau head}
+		Si G.head[predecesseur] = -1 Alors
+			G.head[predecesseur] ← G.m
+		FSi
+
+		{Tableau succ}
+		G.succ ← Reallouer2 G.m+1 cases2 mémoires2 de2 la2 taille2 d'un2 entier2
+		G.succ[G.m] ← successeur		
+
+		{Tableau cost}
+		G.cost ← Reallouer2 G.m+1 cases2 mémoires2 de2 la2 taille2 d'un2 réel2
+		
+		G.cost[G.m] ← cout
+
+		G.m ← G.m + 1
+	FSi
+FAction
+\end{lstlisting}
+
+\begin{lstlisting}[language=pseudo, caption={Procédure de découpage}, label=split]
+Action split(n, T, Q, dist, q, H)
+	D2 :
+		n	:	Entier {Nombre de clients}
+		T	:	Vecteur d'Entiers de taille n {Vecteur obtenu par l'algorithme du Tour géant}
+		Q	:	Entier {Capacité des camions}
+		dist	:	Matrice de Réels de taille n×n {Distances}
+		q	:	Vecteur d'Entiers de taille n {Demandes de livraison}
+	D/R :
+		H	:	Graphe
+	L2 :
+		i	:	Entier
+		j	:	Entier
+		load	:	Entier {Chargement du camion}
+		cost	:	Réel {Distance parcourue par le camion}
+
+	Pour i allant de2 1 à2 n Faire
+		j ← i
+		load ← 0
+
+		Tantque j ← n-1 et2 load ≤ Q Faire
+			load ← load + q[T[j]]
+
+			Si i = j Alors
+				cost ← dist[1][T[i]] + dist[T[i]][0]
+			Sinon
+				cost ← cost - dist[T[j-1]][0] + dist[T[j-1]][T[j]] + dist[T[j]][0]
+			FSi
+
+			Si load ≤ Q Alors
+				ajouter_arc(H, i, j+1, cost)
+			FSi
+
+			j ← j + 1
+		Fait
+	Fait
+FAction
+\end{lstlisting}
+
+\subsection{Shortest path algorithm}
+
+In order to determine which tour succession is the least costly, we now need to use a shortest-path algorithm on the $H$ graph.
+
+In our graphing and combinatorics course, we learned about two shortest-path algorithms : Dijkstra's algorithm and Bellman's algorithm. We immediately notice that for the graph $H$, the conditions for using both algorithms are met. Indeed, the values of the weights are positive, since they correspond to distances (condition of Dijkstra's algorithm) and there are no circuits (condition of Bellman's algorithm).
+
+However, we note that the graph $H$ is always in topological order. Moreover, each level is composed of just one vertex ($N_i = \{ H_i \}$). This gives the Bellman algorithm an advantage. Indeed, under these conditions, it has a complexity in $O(m)$ versus $O(n^2)$ for Dijkstra's algorithm. We therefore decide to use Bellman's algorithm as the shortest path algorithm for our project.
+
+\subsubsection{Data structure}
+
+Bellman's algorithm modifies the data/results \textit{potentials} and \textit{pere}. These vectors are allocated with a predefined size of $n+1$. The \textit{pere} vector contains the indices of the predecessor customers, which are used to propagate the lowest potentials for each customer. The \textit{potentials} vector contains the potentials of each vertex.
+
+\begin{displaymath}
+potentiels = \begin{bmatrix}
+0.0 & 60.0 & 65.0 & 115.0 & 185.0 & 205.0
+\end{bmatrix}
+\end{displaymath}
+
+\begin{displaymath}
+pere = \begin{bmatrix}
+0 & 0 & 0 & 1 & 3 & 3
+\end{bmatrix}
+\end{displaymath}
+
+In this example, vertex $H_4$ has a potential of $185$. To reach this potential, we must first pass through vertex $H_3$. The $H_3$ vertex has a potential of $115$. To reach this potential, we must first pass through vertex $H_1$ and so on. We can therefore easily determine the shortest path with this vector.
+
+\subsubsection{Pseudo-code}
+
+\begin{lstlisting}[language=pseudo, caption={Bellman-Ford}, label=bellman]
+Action bellman(G, potentiels, pere)
+    D2 :
+        G   :   graphe
+    D/R :
+        potentiels  :   vecteur de Réels de taille G.n
+        pere    :   vecteur d'Entiers de taille G.n
+    L :
+        i   :   Entier
+        j   :   Entier
+        x   :   Entier
+        y   :   Entier
+    
+    {Initialisation des vecteurs potentiels et pere}
+	potentiels[0] ← 0
+	pere[0] ← 0
+
+    Pour i allant de2 1 à2 G.n Faire
+		potentiels[i] ← -1
+		pere[i] ← 0
+	Fait
+
+	{Pour tout x successeur de la racine}
+	Pour i allant de2 G.head[0] à2 G.head[1] Faire
+		x ← G.succ[i]
+		potentiels[x] ← G.cost[i]
+    Fait
+
+	{Pour tout y successeur des autres sommets}
+	Pour x allant de2 1 à2 G.n-1 Faire
+        Pour j allant de2 G.head[x] à2 G.head[x+1] Faire
+            y ← G.succ[j]
+			Si potentiels[x] + G.cost[j] < potentiels[y] ou2 potentiels[y] = -1 Alors
+				potentiels[y] ← potentiels[x] + G.cost[j]
+				pere[y] ← x
+			FSi
+		Fait
+	Fait
+
+	{Le dernier sommet n'a pas de successeurs}
+	Si potentiels[G.n-2] + G.cost[G.m-1] < potentiels[G.n-1] ou2 potentiels[G.n-1] = -1 Alors
+		potentiels[G.n-1] ← potentiels[G.n-2] + G->cost[G.m-1]
+		pere[G.n-1] ← G.n-2
+	FSi
+FAction
+\end{lstlisting}
+
+\subsection{Programme principal}
+
+At the start, the main program declares the data structures and enables the import of the data contained in the source file received as a parameter, at runtime. It links the various algorithms presented above.
+Finally, it displays the optimized distance to cover all customers, corresponding to the potential present at the last index of the \textit{potentials} vector. And from the \textit{pere} vector output by Bellman's algorithm, it organizes the tours as follows:
+
+The program takes the index $i$ of the giant tower in the last cell of the vector \textit{pere} and compares it with the index in cell $i$. The difference between these two indices represents the giant tower indices visited in a carrier's tour. And so on, until the first square of the \textit{pere} vector is reached. A translation between the giant tour vector and the customer order is performed.
+
+\subsubsection{Pseudo-code}
+
+\begin{lstlisting}[language=pseudo, caption={Programme principal}, label=main]
+Action progPrincipal(param1, param2)
+	D2 :
+		param1	:	Chaîne de caractère {Paramètre 1 : adresse du fichier}
+		param2	:	Entier {Paramètre 2 : premier client}
+	L2 :
+		i	:	Entier
+		j	:	Entier
+		fic	:	Fichier {Fichier source}
+		n	:	Entier {Nombre de client}
+		Q	:	Entier {Capacité des véhicules}
+		q	:	Vecteur dynamique d'Entiers de taille n+1 {Demandes des clients}
+		M	:	Matrice dynamique de Réels de taille (n+1)×(n+1) {Distances}
+		T	:	Vecteur dynamique d'Entiers de taille n {Tour géant}
+		H	:	Graphe {Structure du graphe auxiliaire}
+		potentiels	:	Vecteur dynamique de Réels de taille n+1 {Potentiels des sommets de H}
+		pere	:	Vecteur dynamique d'Entiers de taille n+1 {Prédecesseurs de coût minimal}
+
+
+
+	{Import des données depuis le fichier source}
+	fic ← Ouvrir param1 en2 mode2 lecture2
+
+	Lire n à2 partir2 de2 fic
+	Lire Q à2 partir2 de2 fic
+
+	q ← Allouer n+1 cases2 mémoires2 de2 la2 taille2 d'un2 entier2
+	Pour i allant de2 0 à2 n Faire
+		Lire q[i] à2 partir2 de2 fic
+	Fait
+
+	M ← Allouer n+1 cases2 mémoires2 de2 la2 taille2 d'un2 pointeur2 vers2 un2 réel2
+	Pour i allant de2 0 à2 n+1 Faire
+		M[i] ← Allouer n+1 cases2 mémoires2 de2 la2 taille2 d'un2 réel2
+		Pour j allant de2 0 à2 n+1 Faire
+			Lire M[i][j] à2 partir2 de2 fic
+		Fait
+	Fait
+
+	Fermer fic
+
+	{Création d'un tour géant}
+	T ← Allouer n cases2 mémoires2 de2 la2 taille2 d'un2 entier2
+
+	tour_geant(param2, n, M, T)
+
+	{Construction d'un graphe auxiliaire avec la procédure SPLIT}
+	init_graphe(H, n+1)
+
+    split(n+1, T, Q, M, q, H)
+
+    {Application de l'algorithme de Bellman}
+
+    potentiels ← Allouer n+1 cases2 mémoires2 de2 la2 taille2 d'un2 réel2
+    pere ← Allouer n+1 cases2 mémoires2 de2 la2 taille2 d'un2 entier2
+
+    bellman(H, potentiels, pere)
+        
+    clear_graphe(H)
+
+    {Affichage du résultat final}
+
+    Afficher "Coût : ", potentiels[n]
+
+    i ← n
+    Tantque i≠0 Faire
+    	Afficher "Tournée : "
+    	Pour j allant de2 pere[i] à2 i Faire
+    		Afficher T[j]
+    	Fait
+    	i ← pere[i]
+    Fait
+
+    Libère q
+
+    Pour i allant de2 0 à2 n+1 Faire
+    	Libère M[i]
+    Fait
+    Libère M
+
+    Libère T
+    Libère potentiels
+    Libère pere
+FAction
+\end{lstlisting}
+
+\subsubsection{Organization of source and header files}
+
+To optimize group work, we have chosen to create source files and their respective header files, then group them together in the main program \textit{main.c}.
+
+The \textit{main.c} file depends on the \textit{tour\_geant.h}, \textit{split.h} and \textit{bellman.h} files. Each source file depends on its header file. Finally, the \textit{bellman.h} file uses the graph data structure defined in \textit{split.h}.
