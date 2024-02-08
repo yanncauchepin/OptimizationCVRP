@@ -2,6 +2,10 @@
 
 ## Prerequisites ##
 
+Before running this code, ensure you have the following :
+
+- ***gcc*** compiler installed on your system.
+
 ## Usage ##
 
 
@@ -30,12 +34,21 @@ make clean
 
 ### Example ###
 
+```bash
+cd Code
+make all
+cd ..
+./cvrp Dataset/exemple3.dat
+```
+
 ## Results ##
 
 ## To do list ##
 
 - [ ] Translate code in english.
-- [ ] Add a summary in readme.
-- [ ] Check files.
+- [ ] Add a summary in README.
+- [ ] Check and rename dataset files.
 - [ ] Check report.
-- [ ] Define a metadata for input.
+- [ ] Define a metadata for input in README.
+- [ ] Handle the print of usage in case of dataset failure.
+- [ ] Generate an ouput.txt file to stock the results.
