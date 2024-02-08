@@ -10,6 +10,7 @@
 
 ## To do list ##
 
+- [ ] Translate code in english.
 - [ ] Add a summary in readme.
 - [ ] Check files.
 - [ ] Check report.
