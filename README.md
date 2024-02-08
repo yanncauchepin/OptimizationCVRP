@@ -1,4 +1,4 @@
-# Capacitated Vehicle Routing Problem (CVRPP) in C #
+# Capacitated Vehicle Routing Problem (CVRP) in C #
 
 ## Prerequisites ##
 
