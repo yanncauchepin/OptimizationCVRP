@@ -1,73 +1,58 @@
 #include <stdlib.h>
 #include "split.h"
 
-void init_graphe(struct graphe* G, int n) {
-	G->n = n;
-	G->m = 0;
-	G->head = (int*)malloc((n-1)*sizeof(int));
-	G->succ = (int*)malloc(1*sizeof(int));
-	G->cost = (float*)malloc(1*sizeof(float));
-
-	int i;
-	for (i=0;i<(n-1);i++) {
-		G->head[i] = -1;
+void init_graph (struct graph* graph, int nb_vertices) {
+	graph->nb_vertices = nb_vertices ;
+	graph->nb_edges = 0 ;
+	graph->head = (int*)malloc((nb_vertices-1)*sizeof(int)) ;
+	graph->successor = (int*)malloc(1*sizeof(int)) ;
+	graph->edge_weights = (double*)malloc(1*sizeof(double)) ;
+	for (int i=0 ; i<(nb_vertices-1) ; i++) {
+		graph->head[i] = -1 ;
 	}
 }
 
-void ajouter_arc(struct graphe* G, int predecesseur, int successeur, float cout) {
-	if (G->m == 0) {
-		G->head[0] = G->m;
-		G->succ[G->m] = successeur;
-		G->cost[G->m] = cout;
-		G->m += 1;
+void add_arc_graph (struct graph* graph, int predecessor, int successor, double cost) {
+	if (graph->nb_edges == 0) {
+		graph->head[0] = graph->nb_edges ;
+		graph->successor[graph->nb_edges] = successor ;
+		graph->edge_weights[graph->nb_edges] = cost ;
+		graph->nb_edges += 1 ;
 	} else {
-		// Tableau head
-		if (G->head[predecesseur] == -1) {
-			G->head[predecesseur] = G->m;
+		if (graph->head[predecessor] == -1) {
+			graph->head[predecessor] = graph->nb_edges ;
 		}
-
-		// Tableau succ
-		G->succ = realloc(G->succ, (G->m+1)*sizeof(int));
-		G->succ[G->m] = successeur;		
-
-		// Tableau cost
-		G->cost = realloc(G->cost, (G->m+1)*sizeof(float));
-		G->cost[G->m] = cout;
-
-		G->m += 1;
+		graph->successor = realloc(graph->successor, (graph->nb_edges+1)*sizeof(int)) ;
+		graph->successor[graph->nb_edges] = successor ;
+		graph->edge_weights = realloc(graph->edge_weights, (graph->nb_edges+1)*sizeof(double)) ;
+		graph->nb_edges[graph->edge_weights] = cost ;
+		graph->nb_edges += 1 ;
 	}
 }
 
-void split(int n, int* T, int Q, float** dist, int* q, struct graphe* H) {
-	int i;
-	int j;
-	int load;
-	float cost;
-
-	for (i=0;i<n-1;i++) {
-		j = i;
-		load = 0;
-
-		while (j < n-1 && load <= Q) {
-			load += q[T[j]-1];
-			
+void split_to_graph (int size, int* T, int capacity_vehicle, double** distance_matrix, int* delivery_demands, struct graph* graph) {
+	int j ;
+	for (int i=0 ; i<(size-1) ; i++) {
+		j = i ;
+		int load = 0 ;
+		while (j < (size-1) && load <= capacity_vehicle) {
+			load += delivery_demands[T[j]-1] ;
+			double cost ;
 			if (i == j) {
-				cost = dist[0][T[i]] + dist[T[i]][0];
+				cost = distance_matrix[0][T[i]] + distance_matrix[T[i]][0] ;
 			} else {
-				cost = cost - dist[T[j-1]][0] + dist[T[j-1]][T[j]] + dist[T[j]][0];
+				cost = cost - distance_matrix[T[j-1]][0] + distance_matrix[T[j-1]][T[j]] + distance_matrix[T[j]][0] ;
 			}
-
-			if (load <= Q) {
-				ajouter_arc(H, i, j+1, cost);
+			if (load <= capacity_vehicle) {
+				add_arc_graph (graph, i, j+1, cost) ;
 			}
-
-			j += 1;
+			j += 1 ;
 		}
 	}
 }
 
-void clear_graphe(struct graphe* G) {
-	free(G->head);
-	free(G->succ);
-	free(G->cost);
+void clear_graph(struct graph* graph) {
+	free(graph->head) ;
+	free(graph->successor) ;
+	free(graph->edge_weights) ;
 }

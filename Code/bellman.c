@@ -1,40 +1,35 @@
 #include "bellman.h"
 
-void bellman(struct graphe* G, float* potentiels, int* pere) {
-	int i;
-	int j;
-	int x;
-	int y;
+void bellman (struct graph* graph, double* potentials, int* parents) {
 
-	// Initialisation des vecteurs potentiels et pere
-	potentiels[0] = 0;
-	pere[0] = 0;
+	potentials[0] = 0 ;
+	parents[0] = 0 ;
 
-	for (i=1;i<G->n;i++) {
-		potentiels[i] = -1;
-		pere[i] = 0;
+	for (int i=1 ; i<graph->nb_vertices ; i++) {
+		potentials[i] = -1 ;
+		parents[i] = 0 ;
 	}
 
-	// Pour tout x successeur de la racine
-	for (i=G->head[0];i<G->head[1];i++) {
-		x = G->succ[i];
-		potentiels[x] = G->cost[i];
+	for (int i=graph->head[0] ; i<graph->head[1] ; i++) {
+		potentials[graph->successor[i]] = graph->edge_weights[i] ;
 	}
 
-	// Pour tout y successeur des autres sommets
-	for (x=1;x<G->n-1;x++) {
-		for (j=G->head[x];j<G->head[x+1];j++) {
-			y = G->succ[j];
-			if (potentiels[x] + G->cost[j] < potentiels[y] || potentiels[y] == -1) {
-				potentiels[y] = potentiels[x] + G->cost[j];
-				pere[y] = x;
+
+	for (int i=0; i<graph->nb_vertices-1 ; i++) {
+		for (int j=graph->head[i] ; j<graph->head[i+1] ; j++) {
+			int value = graph->successor[j] ;
+			if ((potentials[i] + graph->edge_weights[j]) < potentials[value] ||
+			potentials[value] == -1) {
+				potentials[value] = potentials[i] + graph->edge_weights[j] ;
+				parents[value] = i ;
 			}
 		}
 	}
 
-	// Le dernier sommet n'a pas de successeurs
-	if (potentiels[G->n-2] + G->cost[G->m-1] < potentiels[G->n-1] || potentiels[G->n-1] == -1) {
-		potentiels[G->n-1] = potentiels[G->n-2] + G->cost[G->m-1];
-		pere[G->n-1] = G->n-2;
+	if ((potentials[graph->nb_vertices-2] + graph->edge_weights[graph->nb_edges-1]) < potentials[graph->nb_vertices-1] ||
+	potentials[graph->nb_vertices-1] == -1) {
+		potentials[graph->nb_vertices-1] = potentials[graph->nb_vertices-2] + graph->edge_weights[graph->nb_edges-1] ;
+		parents[graph->nb_vertices-1] = graph->nb_vertices-2 ;
 	}
+
 }

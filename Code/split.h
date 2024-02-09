@@ -1,46 +1,36 @@
-#if ! defined (SPLIT_H)
+#ifndef SPLIT_H
 #define SPLIT_H 1
 
-/*
- * SPECIFICATIONS
- * 
- * La procédure de découpage permet de déterminer un graphe auxiliaire, dans
- * lequel les arêtes représentent les tournées et les sommets représentent les
- * transitions entre deux tournées.
- *
- * L'algorithme nécessite avant tout une structure de donnée graphe :
- *  - n : entier strictement positif correspondant au nombre de sommets
- *  - m : entier correspondant au nombre d'arcs
- *  - head : vecteur dynamique de taille n-1
- *  - succ : vecteur dynamique de taille m correspondant aux successeurs
- *  - cost : vecteur dynamique de taille m correspondant aux coûts
- *
- * Ici, le graphe doit être trié dans l'ordre topologique et ne doit pas
- * comporter de cycles.
- *
- * Les actions init_graphe et clear_graphe permettent respectivement
- * d'initialiser et de détruire des graphes.
- *
- * L'action ajouter_arc permet d'ajouter un arc entre deux sommets i et j :
- *  - i : entier correspondant au sommet de départ
- *  - j : entier correspondant au sommet d'arrivée
- *  - cout : réel correspondant à la pondération de l'arc
- */
+/* SPECIFICATIONS
 
-struct graphe {
-	int n;			// Nombre de sommets
-	int m;			// Nombre d'arêtes
-	int* head;
-	int* succ;
-	float* cost;	// Pondérations des arêtes
+The splitting procedure allows determining an auxiliary graph, in which the edges
+represent the routes and the vertices represent transitions between two routes.
+
+The algorithm requires a graph data structure where :
+- nb_vertices : positive integer corresponding to the number of vertices.
+- nb_edges : integer corresponding to the number of arcs.
+- head : dynamic array of size (nb_vertices-1)
+- successor : dynamic array of size nb_edges corresponding to successors.
+- edge_weights : dynamic array of size nb_edges corresponding to costs.
+
+ Here, the graph must be sorted in topological order and must not contain cycles.
+
+*/
+
+struct graph {
+    int nb_vertices ;    //n
+    int nb_edges ;          //m
+    int* head ;
+    int* successor ;
+    double* edge_weights ;    // cost
 };
 
-extern void init_graphe(struct graphe*, int n);
+extern void init_graph(struct graph*, int) ;
 
-extern void ajouter_arc(struct graphe*, int i, int j, float cout);
+extern void add_arc_graph(struct graph*, int, int, double) ;
 
-extern void split(int n, int* T, int Q, float** dist, int* q, struct graphe* H);
+extern void split_to_graph(int, int*, int, double**, int*, struct graph*) ;
 
-extern void clear_graphe(struct graphe*);
+extern void clear_graph(struct graph*) ;
 
 #endif

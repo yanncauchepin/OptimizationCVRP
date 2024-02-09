@@ -2,108 +2,104 @@
 #include <stdlib.h>
 #include "bellman.h"
 #include "split.h"
-#include "tour_geant.h"
+#include "giant_tour.h"
 
-int main(int argc, char *argv[]) {
-    /*
-     * Import des données depuis le fichier source
-     */
-    
-    int i;
-    int j;
 
-    // Ouverture du fichier source
-    FILE *fic;
-    fic = fopen(argv[1], "r");
+int main (int argc, char *argv[]) {
 
-    // Nombre de clients à livrer
-    int n;
-    fscanf(fic, "%d\n", &n);
-    
-    // Capacité maximale des véhicules
-    int Q;
-    fscanf(fic, "%d\n", &Q);
-    
-    // Demandes de livraison
-    int *q;
-    q = (int *)malloc((n+1)*sizeof(int));
-    for (i=0;i<n;i++) {
-        fscanf(fic, "%d", &q[i]);
+    if (argc < 2) {
+       // Not enough arguments provided, display a message and exit
+       printf("Usage : %s <input_file>\n", argv[0]);
+       return 1;
     }
-    
-    // Distances
-    float **M;
-    M = (float **)malloc((n+1)*sizeof(float*));
-    for (i=0;i<n+1;i++) {
-        M[i] = (float *)malloc((n+1)*sizeof(float));
-        for (j=0;j<n+1;j++) {
-            fscanf(fic, "%f", &M[i][j]);
+
+    FILE *file = fopen(argv[1], "r") ;
+
+    if (file == NULL) {
+        printf("Unable to open the file.\n");
+        return 1 ;
+    }
+
+    // IMPORTING DATA FORM THE SOURCE FILE
+
+    file = fopen(argv[1], "r");
+
+    // Get the number of customer to deliver
+    int nb_customer;
+    fscanf(file, "%d\n", &nb_customer);
+
+    // Get the maximum vehicle capacity
+    int capacity_vehicle;
+    fscanf(file, "%d\n", &capacity_vehicle);
+
+    // Get the delivery demands
+    int *delivery_demands;
+    delivery_demands = (int *)malloc((nb_customer+1)*sizeof(int));
+    for (int i=0 ; i<nb_customer ; i++) {
+        fscanf(file, "%d", &delivery_demands[i]);
+    }
+
+    // Get the distance matrix
+    double **distance_matrix;
+    distance_matrix = (double**)malloc((nb_customer+1)*sizeof(double*));
+    for (int i=0 ; i<(nb_customer+1) ; i++) {
+        distance_matrix[i] = (double*)malloc((nb_customer+1)*sizeof(double));
+        for (int j=0 ; j<(nb_customer+1) ; j++) {
+            fscanf(file, "%lf", &distance_matrix[i][j]);
         }
     }
 
-    // Fermeture du fichier source
-    fclose(fic);
+    // Closing the source file
+    fclose(file);
 
-    /*
-     * Création d'un tour géant
-     */
+    // COMPUTING ALGORITHMS
 
-    int *T;
-    T = (int*)malloc(n*sizeof(int));
+    // Creating a Giant Tour
+    int* T;
+    T = (int*)malloc(nb_customer*sizeof(int));
 
-    tour_geant(atoi(argv[2]), n, M, T);
+    giant_tour(atoi(argv[2]), nb_customer, distance_matrix, T);
 
-    /*
-     * Construction d'un graphe auxiliaire avec la procédure SPLIT
-     */
-    
-    struct graphe H;
-    init_graphe(&H, n+1);
+    // Building an auxiliary graph using the Split procedure
+    struct graph graph;
+    init_graph(&graph, nb_customer+1);
 
-    split(n+1, T, Q, M, q, &H);
+    split_to_graph(nb_customer+1, T, capacity_vehicle, distance_matrix, delivery_demands, &graph);
 
-    /*
-     * Application de l'algorithme de Bellman
-     */
-    
-    float *potentiels;
-    int *pere;
-    potentiels = (float *)malloc((n+1)*sizeof(float));
-    pere = (int *)malloc((n+1)*sizeof(int));
-    
-    bellman(&H, potentiels, pere);
-        
-    // Destruction du graphe auxiliaire
-    clear_graphe(&H);
+    // Application of the Bellman algotihm
+    double* potentials = (double*)malloc((nb_customer+1)*sizeof(double));
+    int* parents = (int*)malloc((nb_customer+1)*sizeof(int));
+    bellman(&graph, potentials, parents);
 
-    /*
-     * Affichage du résultat final
-     */
-    
+    // Destruction of the auxiliary graph
+    clear_graph(&graph);
+
+    // DISPLAYING THE FINAL RESULT
+
     // Résultat : coût
-    printf("Coût : %f\n", potentiels[n]);
+    printf("Coût : %f\n", potentials[nb_customer]);
 
     // Résultat : tournées
-    i=n;
+    int i = nb_customer;
     while (i!=0) {
     	printf("Tournée : ");
-        for (j=pere[i];j<i;j++) {
+        for (int j=parents[i] ; j<i ; j++) {
         	printf("%d ", T[j]);
         }
         printf("\n");
-        i = pere[i];
+        i = parents[i];
     }
 
-    free(q);
-    
-    for (i=0;i<n+1;i++) {
-        free(M[i]);
-    }
-    free(M);
+    // FREE DYNAMICALLY ALLOCATED VARIABLES
 
+    for (int i=0 ; i<(nb_customer+1) ; i++) {
+        free(distance_matrix[i]);
+    }
+    free(delivery_demands);
+    free(distance_matrix);
     free(T);
-    free(potentiels);
-    free(pere);
+    free(potentials);
+    free(parents);
 
     return 0;
 }

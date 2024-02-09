@@ -3,22 +3,22 @@
 
 #include "split.h"
 
-/*
- * SPECIFICATIONS
- * 
- * L'algorithme de Bellman permet de déterminer des plus courts chemins depuis
- * un sommet source donné dans un graphe orienté pondéré.
- *
- * Cet algorithme prend en entrée :
- *  - G : une structure graphe défini dans split.h
- *
- * Cet algorithme donne en sortie :
- *  - potentiels : vecteur de n réels correspondant aux potentiels des sommets
- *  - pere : vecteur de n entiers correspondant aux pères de chaque sommet utile
- *    l'élaboration du plus court chemin
- *
+/* SPECIFICATIONS
+
+Bellman's algorithm determines the shortest paths from a given source vertex
+in a weighted directed graph.
+
+This algorithm takes as input :
+- graph : a graph structure defined in split.h
+
+This algorithm produces as output :
+- potentials : a vector of real numvers corresponding to the potentials of the
+vertices.
+- parents : a vector of integers corresponding to the parents of each vertex
+used in the construction of the shortest path.
+
  */
 
-extern void bellman(struct graphe* G, float *potentiels, int *pere);
+extern void bellman (struct graph*, double*, int*) ;
 
 #endif
