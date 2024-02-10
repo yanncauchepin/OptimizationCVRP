@@ -66,7 +66,7 @@ To configure the heuristic algorithm used in this program, the user have to info
 
 ## Results ##
 
-The program will saved the minimum distance cost of the solution and each ordered round to complete the total delivery requests in the **Output** directory in the file named ***output.txt***.
+The program will saved the first customer to deliver, the minimum distance cost of the solution and each ordered round to complete the total delivery requests in the **Output** directory in the file named ***output.txt***.
 
 ## To do list ##
 
