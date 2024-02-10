@@ -7,7 +7,7 @@
 
 int main (int argc, char *argv[]) {
 
-    if (argc < 2) {
+    if (argc != 2) {
        // Not enough arguments provided, display a message and exit
        printf("Usage : %s <input_file>\n", argv[0]);
        return 1;
@@ -98,6 +98,6 @@ int main (int argc, char *argv[]) {
     free(T);
     free(potentials);
     free(parents);
-    
+
     return 0;
 }

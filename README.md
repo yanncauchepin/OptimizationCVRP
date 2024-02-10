@@ -49,6 +49,7 @@ cd ..
 
 - [ ] Add a summary in README.
 - [ ] Check and rename dataset files. Adapt name in report.
+- [ ] Correct segmentation fault error due to float distance in input file.
 - [ ] Translate pseudo code in report in english.
 - [ ] Define a metadata for input in README.
 - [ ] Generate an ouput.txt file to stock the results.
