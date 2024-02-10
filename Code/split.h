@@ -29,7 +29,7 @@ extern void init_graph(struct graph*, int) ;
 
 extern void add_arc_graph(struct graph*, int, int, double) ;
 
-extern void split_to_graph(int, int*, int, double**, int*, struct graph*) ;
+extern void split_graph(int, int*, int, double**, int*, struct graph*) ;
 
 extern void clear_graph(struct graph*) ;
 

@@ -30,7 +30,7 @@ void add_arc_graph (struct graph* graph, int predecessor, int successor, double 
 	}
 }
 
-void split_to_graph (int size, int* T, int capacity_vehicle, double** distance_matrix, int* delivery_demands, struct graph* graph) {
+void split_graph (int size, int* T, int capacity_vehicle, double** distance_matrix, int* delivery_demands, struct graph* graph) {
 	int j ;
 	for (int i=0 ; i<(size-1) ; i++) {
 		j = i ;

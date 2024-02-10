@@ -74,3 +74,4 @@ The program will saved the first customer to deliver, the minimum distance cost 
 - [ ] Correct segmentation fault error due to double matrix distance in input file.
 - [ ] Adapt maximum capacity vehicle from integer to double.
 - [ ] Translate pseudo code in report in english.
+- [ ] Rename variable T to better describe its containing.

@@ -52,6 +52,7 @@ int main (int argc, char *argv[]) {
     fclose(file);
 
     // ASKING THE FIRST CUSTOMER TO APPLY HEURISTIC
+
     int first_customer;
     printf("Enter the first customer to deliver (from to 0 to %d included) : ", (nb_customer-1));
     scanf("%d", &first_customer);
@@ -64,13 +65,13 @@ int main (int argc, char *argv[]) {
 
     // Creating a Giant Tour
     int* T = (int*)malloc(nb_customer*sizeof(int));
-    giant_tour(first_customer, nb_customer, distance_matrix, T); //atoi(argv[2])
+    giant_tour(first_customer, nb_customer, distance_matrix, T);
 
     // Building an auxiliary graph using the Split procedure
     struct graph graph;
     init_graph(&graph, nb_customer+1);
 
-    split_to_graph(nb_customer+1, T, capacity_vehicle, distance_matrix, delivery_demands, &graph);
+    split_graph(nb_customer+1, T, capacity_vehicle, distance_matrix, delivery_demands, &graph);
 
     // Application of the Bellman algotihm
     double* potentials = (double*)malloc((nb_customer+1)*sizeof(double));
@@ -81,8 +82,6 @@ int main (int argc, char *argv[]) {
     clear_graph(&graph);
 
     // DISPLAYING THE FINAL RESULT
-
-
 
     char output_file_path[] = "Output/output.txt";
     FILE* output_file = fopen(output_file_path, "w");
