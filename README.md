@@ -61,7 +61,7 @@ cd ..
 
 ## Monitor ##
 
-To configure the heuristic algorithm used in this program, the user have to inform value during the execution of the program. In chronological order, the user have to provide :
+To configure the heuristic algorithm used in this program, the user have to inform value during the execution of the program. The user have to provide :
 - **First Customer** : Integer value between 0 and the total number of customers minus one, due to variable indexing. If the value informed is not available, the default value 0 is then used.
 
 ## Results ##
