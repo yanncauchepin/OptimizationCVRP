@@ -4,7 +4,6 @@
 #include "split.h"
 #include "giant_tour.h"
 
-
 int main (int argc, char *argv[]) {
 
     if (argc != 2) {
@@ -74,18 +73,27 @@ int main (int argc, char *argv[]) {
 
     // DISPLAYING THE FINAL RESULT
 
-    // Résultat : coût
-    printf("Coût : %f\n", potentials[nb_customer]);
 
-    // Résultat : tournées
-    int i = nb_customer;
-    while (i!=0) {
-    	printf("Tournée : ");
+
+    char output_file_path[] = "Output/output.txt";
+    FILE* output_file = fopen(output_file_path, "w");
+    if (output_file == NULL) {
+      fprintf(stderr, "Unable to open the file %s for writing.\n", output_file_path);
+    } else {
+      fprintf(output_file, "Total distance cost : %lf.\n", potentials[nb_customer]);
+      int nb_round = 0 ;
+      int i = nb_customer ;
+      while (i != 0) {
+        fprintf(output_file, "Ordered Round %d : ", nb_round);
         for (int j=parents[i] ; j<i ; j++) {
-        	printf("%d ", T[j]);
+          fprintf(output_file, "%d ", T[j]);
         }
-        printf("\n");
-        i = parents[i];
+        fprintf(output_file, "\n");
+        i = parents[i] ;
+        nb_round++ ;
+      }
+      printf("Ordered rounds successfully written to '%s'.\n", output_file_path);
+      fclose(file);
     }
 
     // FREE DYNAMICALLY ALLOCATED VARIABLES

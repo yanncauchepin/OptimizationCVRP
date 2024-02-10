@@ -6,6 +6,18 @@ Before running this code, ensure you have the following :
 
 - ***gcc*** compiler installed on your system.
 
+## Input dataset ##
+
+The input files have a specific arguments which can be formatted into simple
+***txt*** files, where :
+- The first line corresponds to the number of customers to be delivered.
+- The second line corresponds to the maximum capacity in units of the vehicles.
+- The third line corresponds to the delivery requests in units of each customer
+which must be less than the maximum capacity of the vehicles.
+- The last lines correspond to the symmetrical matrix of the various distances
+between the depot and the different customer ; the first index corresponding to
+the depot.
+
 ## Usage ##
 
 
@@ -38,7 +50,7 @@ make clean
 cd Code
 make all
 cd ..
-./cvrp Dataset/exemple3.dat
+./cvrp Dataset/small_example_int.txt
 ```
 
 ## Monitor ##
