@@ -14,7 +14,7 @@ Before running this code, ensure you have the following :
 
 ## Input dataset ##
 
-The input files have a specific arguments which can be formatted into simple
+The input files have specific arguments which can be formatted into simple
 ***txt*** files, where :
 - The first line corresponds to the number of customers to be delivered.
 - The second line corresponds to the maximum capacity in units of the vehicles.
