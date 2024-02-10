@@ -13,7 +13,7 @@ Before running this code, ensure you have the following :
 ```bash
 cd Code
 ```
-2. Compile the cvrp program by running ***make all***. 
+2. Compile the cvrp program by running ***make all***.
 ```bash
 make all
 ```
@@ -47,10 +47,8 @@ cd ..
 
 ## To do list ##
 
-- [ ] Translate code in english.
 - [ ] Add a summary in README.
-- [ ] Check and rename dataset files.
-- [ ] Check report.
+- [ ] Check and rename dataset files. Adapt name in report.
+- [ ] Translate pseudo code in report in english.
 - [ ] Define a metadata for input in README.
-- [ ] Handle the print of usage in case of dataset failure.
 - [ ] Generate an ouput.txt file to stock the results.

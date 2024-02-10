@@ -55,10 +55,8 @@ int main (int argc, char *argv[]) {
     // COMPUTING ALGORITHMS
 
     // Creating a Giant Tour
-    int* T;
-    T = (int*)malloc(nb_customer*sizeof(int));
-
-    giant_tour(atoi(argv[2]), nb_customer, distance_matrix, T);
+    int* T = (int*)malloc(nb_customer*sizeof(int));
+    giant_tour(0, nb_customer, distance_matrix, T); //atoi(argv[2])
 
     // Building an auxiliary graph using the Split procedure
     struct graph graph;
@@ -100,6 +98,6 @@ int main (int argc, char *argv[]) {
     free(T);
     free(potentials);
     free(parents);
-
+    
     return 0;
 }
