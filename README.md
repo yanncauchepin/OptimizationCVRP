@@ -1,5 +1,11 @@
 # Capacitated Vehicle Routing Problem (CVRP) in C #
 
+This code involve the problem of cost in carrier deliveries : especially here, we only consider the costs associated with the distance covered.
+We assume here that vehicles have identical storage capacity, and that they all start from the same depot to make their deliveries, and then return at this same depot at the end of their rounds.
+Similarly, we assume that carriers cannot pass a customer without delivering, and that a customer
+cannot be partially delivered by a truck.
+Our program should therefore return the minimum cost of a delivery, as well as the order of customers for each delivery round. The resulting solution is not necessarily optimal because the proposed method is based here on heuristic methods.
+
 ## Prerequisites ##
 
 Before running this code, ensure you have the following :
@@ -55,13 +61,16 @@ cd ..
 
 ## Monitor ##
 
+To configure the heuristic algorithm used in this program, the user have to inform value during the execution of the program. In chronological order, the user have to provide :
+- **First Customer** : Integer value between 0 and the total number of customers minus one, due to variable indexing. If the value informed is not available, the default value 0 is then used.
+
 ## Results ##
+
+The program will saved the minimum distance cost of the solution and each ordered round to complete the total delivery requests in the **Output** directory in the file named ***output.txt***.
 
 ## To do list ##
 
-- [ ] Add a summary in README.
-- [ ] Check and rename dataset files. Adapt name in report.
-- [ ] Correct segmentation fault error due to float distance in input file.
+- [ ] Adapt report with example names.
+- [ ] Correct segmentation fault error due to double matrix distance in input file.
+- [ ] Adapt maximum capacity vehicle from integer to double.
 - [ ] Translate pseudo code in report in english.
-- [ ] Define a metadata for input in README.
-- [ ] Generate an ouput.txt file to stock the results.

@@ -51,11 +51,20 @@ int main (int argc, char *argv[]) {
     // Closing the source file
     fclose(file);
 
+    // ASKING THE FIRST CUSTOMER TO APPLY HEURISTIC
+    int first_customer;
+    printf("Enter the first customer to deliver (from to 0 to %d included) : ", (nb_customer-1));
+    scanf("%d", &first_customer);
+    if (first_customer < 0 || first_customer > (nb_customer-1)) {
+      printf("First customer %d not available. Default value 0 applied.\n", first_customer) ;
+      first_customer = 0;
+    }
+
     // COMPUTING ALGORITHMS
 
     // Creating a Giant Tour
     int* T = (int*)malloc(nb_customer*sizeof(int));
-    giant_tour(0, nb_customer, distance_matrix, T); //atoi(argv[2])
+    giant_tour(first_customer, nb_customer, distance_matrix, T); //atoi(argv[2])
 
     // Building an auxiliary graph using the Split procedure
     struct graph graph;
@@ -80,6 +89,7 @@ int main (int argc, char *argv[]) {
     if (output_file == NULL) {
       fprintf(stderr, "Unable to open the file %s for writing.\n", output_file_path);
     } else {
+      fprintf(output_file, "First customer to deliver : %d.\n", first_customer);
       fprintf(output_file, "Total distance cost : %lf.\n", potentials[nb_customer]);
       int nb_round = 0 ;
       int i = nb_customer ;
