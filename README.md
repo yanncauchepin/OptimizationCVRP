@@ -1,4 +1,5 @@
-# Capacitated Vehicle Routing Problem (CVRP) in C #
+# Capacitated Vehicle Routing Problem (CVRP) #
+> ### Language : C ###
 
 This code involve the problem of cost in carrier deliveries : especially here, we only consider the costs associated with the distance covered.
 We assume here that vehicles have identical storage capacity, and that they all start from the same depot to make their deliveries, and then return at this same depot at the end of their rounds.
