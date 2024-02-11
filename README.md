@@ -76,3 +76,4 @@ The program will saved the first customer to deliver, the minimum distance cost 
 - [ ] Adapt maximum capacity vehicle from integer to double.
 - [ ] Translate pseudo code in report in english.
 - [ ] Rename variable T to better describe its containing.
+- [ ] Adapt the repository to well developer traditions.
