@@ -28,9 +28,9 @@ the depot.
 ## Usage ##
 
 
-1. Navigate to the **Code** directory containing the source code and the ***Makefile*** file.
+1. Navigate to the **code** directory containing the source code and the ***Makefile*** file.
 ```bash
-cd Code
+cd code
 ```
 2. Compile the cvrp program by running ***make all***.
 ```bash
@@ -40,24 +40,24 @@ make all
 ```bash
 cd ..
 ```
-4. Execute the compiled program by running ***./cvrp Dataset/example.txt***, where ***Dataset/example.txt*** is the path to the ***txt*** file containing the input data.
+4. Execute the compiled program by running ***./cvrp dataset/example.txt***, where ***dataset/example.txt*** is the path to the ***txt*** file containing the input data.
 ```bash
-./cvrp Dataset/example.txt
+./cvrp dataset/example.txt
 ```
-*(Optional)* 5. Clean the repository by running ***make clean*** in the **Code** directory.
+*(Optional)* 5. Clean the repository by running ***make clean*** in the **code** directory.
 
 ```bash
-cd Code
+cd code
 make clean
 ```
 
 ### Example ###
 
 ```bash
-cd Code
+cd code
 make all
 cd ..
-./cvrp Dataset/small_example_int.txt
+./cvrp dataset/small_example_int.txt
 ```
 
 ## Monitor ##
@@ -67,7 +67,7 @@ To configure the heuristic algorithm used in this program, the user have to info
 
 ## Results ##
 
-The program will saved the first customer to deliver, the minimum distance cost of the solution and each ordered round to complete the total delivery requests in the **Output** directory in the file named ***output.txt***.
+The program will saved the first customer to deliver, the minimum distance cost of the solution and each ordered round to complete the total delivery requests in the **output** directory in the file named ***output.txt***.
 
 ## To do list ##
 
