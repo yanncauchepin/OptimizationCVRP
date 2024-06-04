@@ -69,10 +69,3 @@ To configure the heuristic algorithm used in this program, the user have to info
 
 The program will saved the first customer to deliver, the minimum distance cost of the solution and each ordered round to complete the total delivery requests in the **output** directory in the file named ***output.txt***.
 
-## To do list ##
-
-- [ ] Adapt report with example names.
-- [ ] Correct segmentation fault error due to double matrix distance in input file.
-- [ ] Adapt maximum capacity vehicle from integer to double.
-- [ ] Translate pseudo code in report in english.
-- [ ] Rename variable T to better describe its containing.
