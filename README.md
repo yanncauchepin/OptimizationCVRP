@@ -1,3 +1,9 @@
+<p align="center">
+  <img src="featured_image.gif" alt="" width="80%">
+</p>
+
+---
+
 # Capacitated Vehicle Routing Problem (CVRP) 
 
 This code involve the cost problem in carrier deliveries : especially here, we only consider the costs associated with the distance covered.
@@ -67,7 +73,3 @@ To configure the heuristic algorithm used in this program, the user have to info
 ## Results 
 
 The program will saved the first customer to deliver, the minimum distance cost of the solution and each ordered round to complete the total delivery requests in the **output** directory in the file named ***output.txt***.
-
----
-
-![](featured_image.jpg)
