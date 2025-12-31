@@ -1,9 +1,3 @@
-<p align="center">
-  <img src="featured_image.png" alt="" width="80%">
-</p>
-
----
-
 # Capacitated Vehicle Routing Problem (CVRP) 
 
 This code involve the cost problem in carrier deliveries : especially here, we only consider the costs associated with the distance covered.
